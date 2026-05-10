@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>olucz. design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+/* ─── BASE ─── */
+:root {
+  --bg:     #edeae3;
+  --ink:    #1c1c1a;
+  --muted:  #7a7872;
+  --accent: #d63c2a;
+  --border: rgba(28,28,26,.13);
+  --gap:    14px;
+  --pad:    40px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html  { scroll-behavior: smooth; }
+* { cursor: none !important; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Mono', monospace;
+  font-size: 11.5px;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+/* ─── DOT CURSOR ─── */
+#dot {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: var(--ink);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  left: -20px; top: -20px;
+  transform: translate(-50%,-50%);
+  transition: width .18s ease, height .18s ease,
+              background .18s ease, opacity .18s ease;
+  mix-blend-mode: multiply;
+  will-change: left, top;
+}
+#dot.h {
+  width: 36px; height: 36px;
+  background: var(--accent);
+  opacity: .5;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: sticky; top: 0; z-index: 200;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 14px var(--pad);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-brand {
+  font-family: 'DM Serif Display', serif;
+  font-size: 17px; letter-spacing: -.01em;
+  text-decoration: none; color: var(--ink);
+}
+.nav-brand em { color: var(--accent); font-style: normal; }
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a {
+  font-size: 10.5px; letter-spacing: .08em;
+  text-decoration: none; color: var(--muted);
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--ink); }
+
+/* ─── INFO BAR ─── */
+.info-bar {
+  display: grid;
+  grid-template-columns: 1.1fr 1.2fr 0.9fr;
+  gap: 32px;
+  padding: 48px var(--pad) 44px;
+  border-bottom: 1px solid var(--border);
+}
+.info-empty { /* intentional blank — keeps Lately at original x position */ }
+
+.col-label {
+  font-size: 10px; color: var(--muted);
+  letter-spacing: .07em; margin-bottom: 12px;
+}
+.lately-link {
+  display: block; text-decoration: none; color: var(--ink);
+  font-size: 10.5px; line-height: 2.1; transition: color .2s;
+}
+.lately-link::before { content: "→ "; color: var(--muted); }
+.lately-link:hover   { color: var(--accent); }
+.lately-link .ext    { color: var(--muted); }
+.featured-name { font-size: 11.5px; line-height: 1.85; }
+
+/* ─── STATEMENT ─── */
+.statement {
+  padding: 72px var(--pad) 80px;
+  max-width: 680px;
+}
+.statement p {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(21px, 2.7vw, 29px);
+  line-height: 1.32; font-weight: 400;
+  letter-spacing: -.01em; margin-bottom: 26px;
+}
+.cta {
+  font-family: 'DM Serif Display', serif;
+  font-size: 16px; text-decoration: none; color: var(--ink);
+  border-bottom: 1.5px solid var(--ink);
+  padding-bottom: 2px; transition: color .2s, border-color .2s;
+}
+.cta:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ─── MARQUEE ─── */
+.mq-wrap {
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 9px 0; white-space: nowrap;
+}
+.mq-track {
+  display: inline-block;
+  animation: mq 28s linear infinite;
+  font-size: 10px; letter-spacing: .1em; color: var(--muted);
+}
+.mq-track .sep { color: var(--accent); margin: 0 34px; }
+@keyframes mq { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ─── GALLERY ─── */
+.gallery {
+  padding: 64px var(--pad) 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* row variants */
+.g-row {
+  display: flex;
+  gap: var(--gap);
+  align-items: flex-start; /* honour natural image height */
+  justify-content: center;
+}
+/* trio: equal thirds */
+.g-row.trio .g-item { flex: 1; }
+
+/* pair: equal halves */
+.g-row.pair .g-item { flex: 1; }
+
+/* solo: centred with breathing room, never forced wide */
+.g-row.solo { justify-content: center; }
+.g-row.solo .g-item { max-width: 520px; width: 100%; }
+
+/* ─── each image card ─── */
+.g-item {
+  position: relative;
+  border-radius: 5px;
+  overflow: hidden;
+  will-change: transform;
+  transition: box-shadow .35s ease;
+}
+.g-item:hover { box-shadow: 0 16px 48px rgba(0,0,0,.13); }
+
+.g-item img {
+  display: block;
+  width: 100%;
+  height: auto;          /* original aspect ratio preserved */
+  border-radius: 5px;
+  transition: filter .3s;
+}
+.g-item:hover img { filter: brightness(1.03) saturate(1.05); }
+
+.g-item .ov {
+  position: absolute; inset: 0;
+  background: rgba(214,60,42,0);
+  border-radius: 5px;
+  transition: background .3s;
+}
+.g-item:hover .ov { background: rgba(214,60,42,.055); }
+
+.g-item .lbl {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 32px 14px 13px;
+  background: linear-gradient(transparent, rgba(10,10,8,.52));
+  color: #f0ede8;
+  font-size: 9.5px; letter-spacing: .09em;
+  text-transform: uppercase;
+  opacity: 0; transform: translateY(5px);
+  transition: opacity .28s, transform .28s;
+  border-radius: 0 0 5px 5px;
+}
+.g-item:hover .lbl { opacity: 1; transform: translateY(0); }
+
+/* ─── LIGHTBOX ─── */
+#lb {
+  position: fixed; inset: 0;
+  background: rgba(8,8,6,.94);
+  z-index: 800; display: none;
+  align-items: center; justify-content: center;
+  padding: 24px;
+}
+#lb.open { display: flex; }
+.lb-inner {
+  max-width: 840px; width: 100%;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 40px; align-items: center;
+}
+.lb-img-wrap img {
+  width: 100%; border-radius: 5px;
+  max-height: 85vh; object-fit: contain;
+}
+.lb-info { color: #f0ede8; }
+.lb-tag {
+  font-size: 9px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
+}
+.lb-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px; line-height: 1.15;
+  text-transform: uppercase; letter-spacing: .04em; margin-bottom: 12px;
+}
+.lb-desc { font-size: 10.5px; line-height: 1.9; color: rgba(240,237,232,.6); }
+.lb-close {
+  position: absolute; top: 20px; right: 28px;
+  background: none; border: none;
+  color: rgba(240,237,232,.45); font-size: 11px;
+  font-family: 'DM Mono', monospace; letter-spacing: .08em;
+  padding: 6px; transition: color .2s;
+}
+.lb-close:hover { color: #f0ede8; }
+
+/* ─── FOOTER ─── */
+footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px var(--pad);
+  border-top: 1px solid var(--border);
+}
+.foot-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px; letter-spacing: -.02em;
+}
+.foot-logo em { color: var(--accent); font-style: normal; }
+.foot-time {
+  font-size: 10px; color: var(--muted);
+  display: flex; align-items: center; gap: 7px;
+}
+.blink {
+  width: 6px; height: 6px; background: var(--accent);
+  border-radius: 50%; animation: bl 2s ease-in-out infinite;
+}
+@keyframes bl { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+/* ─── MOBILE ─── */
+@media (max-width: 680px) {
+  :root { --pad: 16px; --gap: 10px; }
+
+  .nav-links { gap: 18px; }
+
+  .info-bar {
+    grid-template-columns: 1fr;
+    gap: 24px; padding: 32px var(--pad) 36px;
+  }
+  .info-empty { display: none; }
+
+  .statement { padding: 48px var(--pad) 56px; }
+
+  .gallery { padding: 40px var(--pad) 60px; gap: 18px; }
+
+  .g-row,
+  .g-row.trio,
+  .g-row.pair,
+  .g-row.solo {
+    flex-direction: column;
+    gap: 14px;
+  }
+  .g-row.solo .g-item { max-width: 100%; }
+
+  .lb-inner { grid-template-columns: 1fr; gap: 24px; }
+  .lb-img-wrap img { max-height: 55vw; }
+
+  footer { padding: 18px var(--pad); }
+}
+</style>
+</head>
+<body>
+
+<!-- dot cursor -->
+<div id="dot"></div>
+
+<!-- lightbox -->
+<div id="lb" role="dialog" aria-modal="true">
+  <button class="lb-close" id="lb-x">✕ close</button>
+  <div class="lb-inner">
+    <div class="lb-img-wrap"><img id="lb-img" src="" alt=""></div>
+    <div class="lb-info">
+      <div class="lb-tag"   id="lb-tag"></div>
+      <div class="lb-title" id="lb-title"></div>
+      <div class="lb-desc"  id="lb-desc"></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">olucz<em>.</em></a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- INFO BAR — first col intentionally empty -->
+<section class="info-bar">
+
+  <div class="info-empty"></div>
+
+  <div>
+    <div class="col-label">Lately;</div>
+    <a href="#" class="lately-link">ESKA FX poster released <span class="ext">(work→)</span></a>
+    <a href="#" class="lately-link">Gengar illustration dropped <span class="ext">(ig→)</span></a>
+    <a href="#" class="lately-link">Lucha Libre series finished <span class="ext">(work→)</span></a>
+    <a href="#" class="lately-link">Godzila v2 updated <span class="ext">(work→)</span></a>
+    <a href="#" class="lately-link">Flamingo study published <span class="ext">(ext→)</span></a>
+    <a href="#" class="lately-link">HardBike campaign live <span class="ext">(work→)</span></a>
+    <a href="#" class="lately-link">Lorem Ipsum exploration <span class="ext">(ig→)</span></a>
+  </div>
+
+  <div>
+    <div class="col-label">Featured;</div>
+    <div class="featured-name">Flamingo<br>Editorial Study</div>
+  </div>
+
+</section>
+
+<!-- STATEMENT -->
+<section class="statement" id="about">
+  <p>Posters that live between design, culture and obsession — each piece a visual argument for something worth saying.</p>
+  <a href="#work" class="cta">See the work →</a>
+</section>
+
+<!-- MARQUEE -->
+<div class="mq-wrap">
+  <div class="mq-track">
+    <span>Poster Design</span><span class="sep">✦</span>
+    <span>Typography</span><span class="sep">✦</span>
+    <span>Illustration</span><span class="sep">✦</span>
+    <span>Editorial</span><span class="sep">✦</span>
+    <span>Art Direction</span><span class="sep">✦</span>
+    <span>Motion</span><span class="sep">✦</span>
+    <span>Visual Identity</span><span class="sep">✦</span>
+    <span>Poster Design</span><span class="sep">✦</span>
+    <span>Typography</span><span class="sep">✦</span>
+    <span>Illustration</span><span class="sep">✦</span>
+    <span>Editorial</span><span class="sep">✦</span>
+    <span>Art Direction</span><span class="sep">✦</span>
+    <span>Motion</span><span class="sep">✦</span>
+    <span>Visual Identity</span><span class="sep">✦</span>
+  </div>
+</div>
+
+<!-- ─── UNIFIED GALLERY ─── -->
+<section class="gallery" id="work">
+
+  <!-- row 1 · trio -->
+  <div class="g-row trio">
+    <div class="g-item" data-speed="38"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/2794-1.jpg"
+      data-tag="Typography" data-title="2794"
+      data-desc="Numbers as pure form — 2794 stripped of context, left to exist as shape and negative space.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/2794-1.jpg" alt="2794" loading="lazy">
+      <div class="ov"></div><div class="lbl">2794</div>
+    </div>
+    <div class="g-item" data-speed="55"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/%40-1.jpg"
+      data-tag="Typography" data-title="@ — At Symbol"
+      data-desc="The @ sign reimagined as monumental architecture — ubiquitous yet unseen.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/%40-1.jpg" alt="@" loading="lazy">
+      <div class="ov"></div><div class="lbl">@</div>
+    </div>
+    <div class="g-item" data-speed="28"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/x-1.jpg"
+      data-tag="Typography" data-title="X"
+      data-desc="Intersection, negation, multiplication — one letter, infinite readings.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/x-1.jpg" alt="X" loading="lazy">
+      <div class="ov"></div><div class="lbl">X</div>
+    </div>
+  </div>
+
+  <!-- row 2 · solo -->
+  <div class="g-row solo">
+    <div class="g-item" data-speed="60"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Asterisco-v1---A4.png"
+      data-tag="Editorial" data-title="Asterisco v1"
+      data-desc="The asterisk — footnote turned protagonist. A shape that asks you to keep reading.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Asterisco-v1---A4.png" alt="Asterisco" loading="lazy">
+      <div class="ov"></div><div class="lbl">Asterisco v1</div>
+    </div>
+  </div>
+
+  <!-- row 3 · pair -->
+  <div class="g-row pair">
+    <div class="g-item" data-speed="44"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Comic-Sans-12.jpg"
+      data-tag="Experimental" data-title="Comic Sans 12"
+      data-desc="The world's most misunderstood typeface finally gets its due — a love letter to Comic Sans.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Comic-Sans-12.jpg" alt="Comic Sans 12" loading="lazy">
+      <div class="ov"></div><div class="lbl">Comic Sans 12</div>
+    </div>
+    <div class="g-item" data-speed="24"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Lorem%20Ipsum.png"
+      data-tag="Editorial" data-title="Lorem Ipsum"
+      data-desc="The placeholder that filled a million mockups finally gets its own spotlight.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Lorem%20Ipsum.png" alt="Lorem Ipsum" loading="lazy">
+      <div class="ov"></div><div class="lbl">Lorem Ipsum</div>
+    </div>
+  </div>
+
+  <!-- row 4 · solo -->
+  <div class="g-row solo">
+    <div class="g-item" data-speed="50"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Overcome-v1---A4.png"
+      data-tag="Editorial" data-title="Overcome v1"
+      data-desc="A word with mass. Overcome rendered with the visual gravity of its meaning.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Overcome-v1---A4.png" alt="Overcome" loading="lazy">
+      <div class="ov"></div><div class="lbl">Overcome</div>
+    </div>
+  </div>
+
+  <!-- row 5 · trio -->
+  <div class="g-row trio">
+    <div class="g-item" data-speed="34"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Flamingo.png"
+      data-tag="Illustration" data-title="Flamingo"
+      data-desc="Pink on pink. The flamingo as icon — elegance made geometric, grace made flat.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Flamingo.png" alt="Flamingo" loading="lazy">
+      <div class="ov"></div><div class="lbl">Flamingo</div>
+    </div>
+    <div class="g-item" data-speed="58"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Orange-1.png"
+      data-tag="Illustration" data-title="Orange"
+      data-desc="Citrus as study — texture, cross-section and chromatic saturation celebrating the everyday.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Orange-1.png" alt="Orange" loading="lazy">
+      <div class="ov"></div><div class="lbl">Orange</div>
+    </div>
+    <div class="g-item" data-speed="40"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Drzewo-1.png"
+      data-tag="Illustration" data-title="Drzewo"
+      data-desc="Tree (Polish: Drzewo) — root, trunk, branch rendered as pure structure and negative space.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Drzewo-1.png" alt="Drzewo" loading="lazy">
+      <div class="ov"></div><div class="lbl">Drzewo</div>
+    </div>
+  </div>
+
+  <!-- row 6 · solo wide (ESKA FX) -->
+  <div class="g-row solo">
+    <div class="g-item" style="max-width:680px;width:100%;" data-speed="52"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/ESKA-FX_1778338960005.png"
+      data-tag="Experimental" data-title="ESKA FX"
+      data-desc="ESKA FX — a collision of systems. Where the grid breaks and the image takes over.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/ESKA-FX_1778338960005.png" alt="ESKA FX" loading="lazy">
+      <div class="ov"></div><div class="lbl">ESKA FX</div>
+    </div>
+  </div>
+
+  <!-- row 7 · pair -->
+  <div class="g-row pair">
+    <div class="g-item" data-speed="30"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Gengar%201.png"
+      data-tag="Pop Culture" data-title="Gengar"
+      data-desc="Ghost-type. Shadow Pokémon reimagined as a midnight poster — sinister, beautiful, iconic.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Gengar%201.png" alt="Gengar" loading="lazy">
+      <div class="ov"></div><div class="lbl">Gengar</div>
+    </div>
+    <div class="g-item" data-speed="48"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Godzila-v2.png"
+      data-tag="Pop Culture" data-title="Godzila v2"
+      data-desc="King of monsters v2 — bigger, darker, more deliberate. The kaiju as graphic legend.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Godzila-v2.png" alt="Godzila v2" loading="lazy">
+      <div class="ov"></div><div class="lbl">Godzila v2</div>
+    </div>
+  </div>
+
+  <!-- row 8 · solo -->
+  <div class="g-row solo">
+    <div class="g-item" data-speed="42"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Lucha-Libre-1.png"
+      data-tag="Pop Culture" data-title="Lucha Libre"
+      data-desc="La máscara es el personaje. Mexican wrestling culture distilled into a single chromatic explosion.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Lucha-Libre-1.png" alt="Lucha Libre" loading="lazy">
+      <div class="ov"></div><div class="lbl">Lucha Libre</div>
+    </div>
+  </div>
+
+  <!-- row 9 · trio sport -->
+  <div class="g-row trio">
+    <div class="g-item" data-speed="36"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/HardBike.jpg"
+      data-tag="Sport" data-title="HardBike"
+      data-desc="Gravel, grit, endurance. HardBike distilled into the rawness of the ride.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/HardBike.jpg" alt="HardBike" loading="lazy">
+      <div class="ov"></div><div class="lbl">HardBike</div>
+    </div>
+    <div class="g-item" data-speed="52"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Run-1.jpg"
+      data-tag="Sport" data-title="Run"
+      data-desc="One word, one action. The runner as poster — movement compressed into stillness.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Run-1.jpg" alt="Run" loading="lazy">
+      <div class="ov"></div><div class="lbl">Run</div>
+    </div>
+    <div class="g-item" data-speed="33"
+      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Serving.jpg"
+      data-tag="Sport" data-title="Serving"
+      data-desc="The serve — peak kinetic tension at the edge of impact, made static and eternal.">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Serving.jpg" alt="Serving" loading="lazy">
+      <div class="ov"></div><div class="lbl">Serving</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">olucz<em>.</em></div>
+  <div class="foot-time">
+    BRT <span id="clock">—</span>
+    <span class="blink"></span>
+  </div>
+</footer>
+
+<script>
+/* ── Dot cursor ── */
+const dot = document.getElementById('dot');
+document.addEventListener('mousemove', e => {
+  dot.style.left = e.clientX + 'px';
+  dot.style.top  = e.clientY + 'px';
+});
+const hoverEls = document.querySelectorAll('a, button, .g-item, .lately-link');
+hoverEls.forEach(el => {
+  el.addEventListener('mouseenter', () => dot.classList.add('h'));
+  el.addEventListener('mouseleave', () => dot.classList.remove('h'));
+});
+
+/* ── Clock BRT ── */
+function tick() {
+  const d = new Date(new Date().toLocaleString('en-US',{timeZone:'America/Sao_Paulo'}));
+  document.getElementById('clock').textContent =
+    [d.getHours(),d.getMinutes(),d.getSeconds()]
+      .map(n => String(n).padStart(2,'0')).join(':');
+}
+tick(); setInterval(tick, 1000);
+
+/* ── Parallax ── */
+const items    = Array.from(document.querySelectorAll('.g-item'));
+let   ticking  = false;
+let   isMobile = window.innerWidth <= 680;
+
+function applyParallax() {
+  if (isMobile) return;
+  const scrollY = window.scrollY;
+  const vh = window.innerHeight;
+  items.forEach(item => {
+    const speed   = parseFloat(item.dataset.speed || '40') * 0.0008;
+    const rect    = item.getBoundingClientRect();
+    const center  = rect.top + rect.height * 0.5;
+    const dist    = center - vh * 0.5;
+    item.style.transform = `translateY(${dist * speed}px)`;
+  });
+  ticking = false;
+}
+
+window.addEventListener('scroll', () => {
+  if (!ticking) { requestAnimationFrame(applyParallax); ticking = true; }
+}, { passive: true });
+
+window.addEventListener('resize', () => {
+  isMobile = window.innerWidth <= 680;
+  if (isMobile) items.forEach(i => i.style.transform = '');
+});
+
+applyParallax();
+
+/* ── Scroll-reveal ── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity    = '1';
+      e.target.style.transition = 'opacity .65s ease, box-shadow .35s ease';
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.06 });
+items.forEach(item => { item.style.opacity = '0'; io.observe(item); });
+
+/* ── Lightbox ── */
+const lb      = document.getElementById('lb');
+const lbImg   = document.getElementById('lb-img');
+const lbTag   = document.getElementById('lb-tag');
+const lbTitle = document.getElementById('lb-title');
+const lbDesc  = document.getElementById('lb-desc');
+
+function openLB(item) {
+  lbImg.src             = item.dataset.src;
+  lbImg.alt             = item.dataset.title || '';
+  lbTag.textContent     = item.dataset.tag   || '';
+  lbTitle.textContent   = item.dataset.title || '';
+  lbDesc.textContent    = item.dataset.desc  || '';
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLB() {
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+items.forEach(item => item.addEventListener('click', () => openLB(item)));
+document.getElementById('lb-x').addEventListener('click', closeLB);
+lb.addEventListener('click', e => { if (e.target === lb) closeLB(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLB(); });
+</script>
+</body>
+</html>
