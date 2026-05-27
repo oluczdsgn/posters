@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>olucz. design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 
 /* ─── BASE ─── */
@@ -26,10 +27,11 @@ html  { scroll-behavior: smooth; }
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: 'DM Mono', monospace;
-  font-size: 11.5px;
-  line-height: 1.65;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  line-height: 1.6;
   overflow-x: hidden;
+  font-feature-settings: "ss01","ss02";
 }
 
 /* ─── DOT CURSOR ─── */
@@ -62,14 +64,14 @@ nav {
   display: flex; align-items: center; justify-content: space-between;
 }
 .nav-brand {
-  font-family: 'DM Serif Display', serif;
-  font-size: 17px; letter-spacing: -.01em;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 17px; letter-spacing: -.03em; font-weight: 700;
   text-decoration: none; color: var(--ink);
 }
 .nav-brand em { color: var(--accent); font-style: normal; }
 .nav-links { display: flex; gap: 28px; list-style: none; }
 .nav-links a {
-  font-size: 10.5px; letter-spacing: .08em;
+  font-size: 11px; letter-spacing: .06em; font-weight: 400;
   text-decoration: none; color: var(--muted);
   transition: color .2s;
 }
@@ -86,17 +88,18 @@ nav {
 .info-empty { /* intentional blank — keeps Lately at original x position */ }
 
 .col-label {
+  font-family: 'Space Mono', monospace;
   font-size: 10px; color: var(--muted);
-  letter-spacing: .07em; margin-bottom: 12px;
+  letter-spacing: .06em; margin-bottom: 12px;
 }
 .lately-link {
   display: block; text-decoration: none; color: var(--ink);
-  font-size: 10.5px; line-height: 2.1; transition: color .2s;
+  font-size: 11.5px; font-weight: 400; line-height: 2.1; transition: color .2s;
 }
 .lately-link::before { content: "→ "; color: var(--muted); }
 .lately-link:hover   { color: var(--accent); }
 .lately-link .ext    { color: var(--muted); }
-.featured-name { font-size: 11.5px; line-height: 1.85; }
+.featured-name { font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 500; line-height: 1.8; }
 
 /* ─── STATEMENT ─── */
 .statement {
@@ -104,14 +107,15 @@ nav {
   max-width: 680px;
 }
 .statement p {
-  font-family: 'DM Serif Display', serif;
-  font-size: clamp(21px, 2.7vw, 29px);
-  line-height: 1.32; font-weight: 400;
-  letter-spacing: -.01em; margin-bottom: 26px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(22px, 2.8vw, 30px);
+  line-height: 1.28; font-weight: 600;
+  letter-spacing: -.03em; margin-bottom: 26px;
 }
 .cta {
-  font-family: 'DM Serif Display', serif;
-  font-size: 16px; text-decoration: none; color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px; font-weight: 500;
+  text-decoration: none; color: var(--ink);
   border-bottom: 1.5px solid var(--ink);
   padding-bottom: 2px; transition: color .2s, border-color .2s;
 }
@@ -127,6 +131,7 @@ nav {
 .mq-track {
   display: inline-block;
   animation: mq 28s linear infinite;
+  font-family: 'Space Mono', monospace;
   font-size: 10px; letter-spacing: .1em; color: var(--muted);
 }
 .mq-track .sep { color: var(--accent); margin: 0 34px; }
@@ -189,7 +194,8 @@ nav {
   padding: 32px 14px 13px;
   background: linear-gradient(transparent, rgba(10,10,8,.52));
   color: #f0ede8;
-  font-size: 9.5px; letter-spacing: .09em;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; letter-spacing: .1em;
   text-transform: uppercase;
   opacity: 0; transform: translateY(5px);
   transition: opacity .28s, transform .28s;
@@ -217,20 +223,21 @@ nav {
 }
 .lb-info { color: #f0ede8; }
 .lb-tag {
+  font-family: 'Space Mono', monospace;
   font-size: 9px; letter-spacing: .14em;
   text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
 }
 .lb-title {
-  font-family: 'DM Serif Display', serif;
-  font-size: 26px; line-height: 1.15;
-  text-transform: uppercase; letter-spacing: .04em; margin-bottom: 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px; line-height: 1.1; font-weight: 700;
+  text-transform: uppercase; letter-spacing: -.02em; margin-bottom: 12px;
 }
-.lb-desc { font-size: 10.5px; line-height: 1.9; color: rgba(240,237,232,.6); }
+.lb-desc { font-family: 'Space Grotesk', sans-serif; font-size: 11px; line-height: 1.85; color: rgba(240,237,232,.6); font-weight: 400; }
 .lb-close {
   position: absolute; top: 20px; right: 28px;
   background: none; border: none;
   color: rgba(240,237,232,.45); font-size: 11px;
-  font-family: 'DM Mono', monospace; letter-spacing: .08em;
+  font-family: 'Space Mono', monospace; letter-spacing: .06em;
   padding: 6px; transition: color .2s;
 }
 .lb-close:hover { color: #f0ede8; }
@@ -242,11 +249,12 @@ footer {
   border-top: 1px solid var(--border);
 }
 .foot-logo {
-  font-family: 'DM Serif Display', serif;
-  font-size: 22px; letter-spacing: -.02em;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px; letter-spacing: -.04em; font-weight: 700;
 }
 .foot-logo em { color: var(--accent); font-style: normal; }
 .foot-time {
+  font-family: 'Space Mono', monospace;
   font-size: 10px; color: var(--muted);
   display: flex; align-items: center; gap: 7px;
 }
@@ -341,7 +349,7 @@ footer {
 
 <!-- STATEMENT -->
 <section class="statement" id="about">
-  <p>Posters that live between design, culture and obsession, each piece a visual argument for something worth saying.</p>
+  <p>Posters that live between design, culture and obsession — each piece a visual argument for something worth saying.</p>
   <a href="#work" class="cta">See the work →</a>
 </section>
 
