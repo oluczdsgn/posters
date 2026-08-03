@@ -1,709 +1,842 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>olucz. design</title>
+<title>olucz</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-
-/* ─── BASE ─── */
-:root {
-  --bg:     #edeae3;
-  --ink:    #1c1c1a;
-  --muted:  #7a7872;
-  --accent: #d63c2a;
-  --border: rgba(28,28,26,.13);
-  --gap:    14px;
-  --pad:    40px;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html  { scroll-behavior: smooth; }
-* { cursor: none !important; }
-
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 12px;
-  line-height: 1.6;
-  overflow-x: hidden;
-  font-feature-settings: "ss01","ss02";
-}
-
-/* ─── DOT CURSOR ─── */
-#dot {
-  position: fixed;
-  width: 8px; height: 8px;
-  background: var(--ink);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  left: -20px; top: -20px;
-  transform: translate(-50%,-50%);
-  transition: width .18s ease, height .18s ease,
-              background .18s ease, opacity .18s ease;
-  mix-blend-mode: multiply;
-  will-change: left, top;
-}
-#dot.h {
-  width: 36px; height: 36px;
-  background: var(--accent);
-  opacity: .5;
-}
-
-/* ─── NAV ─── */
-nav {
-  position: sticky; top: 0; z-index: 200;
-  background: var(--bg);
-  border-bottom: 1px solid var(--border);
-  padding: 14px var(--pad);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.nav-brand {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 17px; letter-spacing: -.03em; font-weight: 700;
-  text-decoration: none; color: var(--ink);
-}
-.nav-brand em { color: var(--accent); font-style: normal; }
-.nav-links { display: flex; gap: 28px; list-style: none; }
-.nav-links a {
-  font-size: 11px; letter-spacing: .06em; font-weight: 400;
-  text-decoration: none; color: var(--muted);
-  transition: color .2s;
-}
-.nav-links a:hover { color: var(--ink); }
-
-/* ─── INFO BAR ─── */
-.info-bar {
-  display: grid;
-  grid-template-columns: 1.1fr 1.2fr 0.9fr;
-  gap: 32px;
-  padding: 48px var(--pad) 44px;
-  border-bottom: 1px solid var(--border);
-}
-.info-empty { /* intentional blank — keeps Lately at original x position */ }
-
-.col-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 10px; color: var(--muted);
-  letter-spacing: .06em; margin-bottom: 12px;
-}
-.lately-link {
-  display: block; text-decoration: none; color: var(--ink);
-  font-size: 11.5px; font-weight: 400; line-height: 2.1; transition: color .2s;
-}
-.lately-link::before { content: "→ "; color: var(--muted); }
-.lately-link:hover   { color: var(--accent); }
-.lately-link .ext    { color: var(--muted); }
-.featured-name { font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 500; line-height: 1.8; }
-
-/* ─── STATEMENT ─── */
-.statement {
-  padding: 72px var(--pad) 80px;
-  max-width: 680px;
-}
-.statement p {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(22px, 2.8vw, 30px);
-  line-height: 1.28; font-weight: 600;
-  letter-spacing: -.03em; margin-bottom: 26px;
-}
-.cta {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 15px; font-weight: 500;
-  text-decoration: none; color: var(--ink);
-  border-bottom: 1.5px solid var(--ink);
-  padding-bottom: 2px; transition: color .2s, border-color .2s;
-}
-.cta:hover { color: var(--accent); border-color: var(--accent); }
-
-/* ─── MARQUEE ─── */
-.mq-wrap {
-  overflow: hidden;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 9px 0; white-space: nowrap;
-}
-.mq-track {
-  display: inline-block;
-  animation: mq 28s linear infinite;
-  font-family: 'Space Mono', monospace;
-  font-size: 10px; letter-spacing: .1em; color: var(--muted);
-}
-.mq-track .sep { color: var(--accent); margin: 0 34px; }
-@keyframes mq { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-
-/* ─── GALLERY ─── */
-.gallery {
-  padding: 64px var(--pad) 90px;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-}
-
-/* row variants */
-.g-row {
-  display: flex;
-  gap: var(--gap);
-  align-items: flex-start; /* honour natural image height */
-  justify-content: center;
-}
-/* trio: equal thirds */
-.g-row.trio .g-item { flex: 1; }
-
-/* pair: equal halves */
-.g-row.pair .g-item { flex: 1; }
-
-/* solo: centred with breathing room, never forced wide */
-.g-row.solo { justify-content: center; }
-.g-row.solo .g-item { max-width: 520px; width: 100%; }
-
-/* ─── each image card ─── */
-.g-item {
-  position: relative;
-  border-radius: 5px;
-  overflow: hidden;
-  will-change: transform;
-  transition: box-shadow .35s ease;
-}
-.g-item:hover { box-shadow: 0 16px 48px rgba(0,0,0,.13); }
-
-.g-item img {
-  display: block;
-  width: 100%;
-  height: auto;          /* original aspect ratio preserved */
-  border-radius: 5px;
-  transition: filter .3s;
-}
-.g-item:hover img { filter: brightness(1.03) saturate(1.05); }
-
-.g-item .ov {
-  position: absolute; inset: 0;
-  background: rgba(214,60,42,0);
-  border-radius: 5px;
-  transition: background .3s;
-}
-.g-item:hover .ov { background: rgba(214,60,42,.055); }
-
-.g-item .lbl {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 32px 14px 13px;
-  background: linear-gradient(transparent, rgba(10,10,8,.52));
-  color: #f0ede8;
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; letter-spacing: .1em;
-  text-transform: uppercase;
-  opacity: 0; transform: translateY(5px);
-  transition: opacity .28s, transform .28s;
-  border-radius: 0 0 5px 5px;
-}
-.g-item:hover .lbl { opacity: 1; transform: translateY(0); }
-
-/* ─── LIGHTBOX ─── */
-#lb {
-  position: fixed; inset: 0;
-  background: rgba(8,8,6,.94);
-  z-index: 800; display: none;
-  align-items: center; justify-content: center;
-  padding: 24px;
-}
-#lb.open { display: flex; }
-.lb-inner {
-  max-width: 840px; width: 100%;
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 40px; align-items: center;
-}
-.lb-img-wrap img {
-  width: 100%; border-radius: 5px;
-  max-height: 85vh; object-fit: contain;
-}
-.lb-info { color: #f0ede8; }
-.lb-tag {
-  font-family: 'Space Mono', monospace;
-  font-size: 9px; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
-}
-.lb-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 26px; line-height: 1.1; font-weight: 700;
-  text-transform: uppercase; letter-spacing: -.02em; margin-bottom: 12px;
-}
-.lb-desc { font-family: 'Space Grotesk', sans-serif; font-size: 11px; line-height: 1.85; color: rgba(240,237,232,.6); font-weight: 400; }
-.lb-close {
-  position: absolute; top: 20px; right: 28px;
-  background: none; border: none;
-  color: rgba(240,237,232,.45); font-size: 11px;
-  font-family: 'Space Mono', monospace; letter-spacing: .06em;
-  padding: 6px; transition: color .2s;
-}
-.lb-close:hover { color: #f0ede8; }
-
-/* ─── FOOTER ─── */
-footer {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 22px var(--pad);
-  border-top: 1px solid var(--border);
-}
-.foot-logo {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 20px; letter-spacing: -.04em; font-weight: 700;
-}
-.foot-logo em { color: var(--accent); font-style: normal; }
-.foot-time {
-  font-family: 'Space Mono', monospace;
-  font-size: 10px; color: var(--muted);
-  display: flex; align-items: center; gap: 7px;
-}
-.blink {
-  width: 6px; height: 6px; background: var(--accent);
-  border-radius: 50%; animation: bl 2s ease-in-out infinite;
-}
-@keyframes bl { 0%,100%{opacity:1} 50%{opacity:.2} }
-
-/* ─── MOBILE ─── */
-@media (max-width: 680px) {
-  :root { --pad: 16px; --gap: 10px; }
-
-  .nav-links { gap: 18px; }
-
-  .info-bar {
-    grid-template-columns: 1fr;
-    gap: 24px; padding: 32px var(--pad) 36px;
+  :root{
+    --bg:      #f4f3f0;
+    --ink:     #0c0c0c;
+    --soft:    #6f6e6a;
+    --line:    #dedcd6;
+    --accent:  #c23b2b;
   }
-  .info-empty { display: none; }
 
-  .statement { padding: 48px var(--pad) 56px; }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
 
-  .gallery { padding: 40px var(--pad) 60px; gap: 18px; }
-
-  .g-row,
-  .g-row.trio,
-  .g-row.pair,
-  .g-row.solo {
-    flex-direction: column;
-    gap: 14px;
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    overflow-x:hidden;
+    cursor:none;
   }
-  .g-row.solo .g-item { max-width: 100%; }
 
-  .lb-inner { grid-template-columns: 1fr; gap: 24px; }
-  .lb-img-wrap img { max-height: 55vw; }
+  a{ color:inherit; text-decoration:none; }
+  ::selection{ background:var(--ink); color:var(--bg); }
 
-  footer { padding: 18px var(--pad); }
-}
+  .mono{ font-family:'JetBrains Mono', monospace; }
+
+  /* ================= custom cursor — more prominent ================= */
+  #ring{
+    position:fixed; top:0; left:0;
+    width:46px; height:46px;
+    border:2px solid var(--ink);
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9999;
+    transform:translate(-50%,-50%);
+    transition:width .3s cubic-bezier(.2,.8,.2,1), height .3s cubic-bezier(.2,.8,.2,1),
+               border-color .3s ease, background-color .3s ease;
+    display:flex; align-items:center; justify-content:center;
+    mix-blend-mode:difference;
+    will-change:transform,width,height;
+  }
+  #dot{
+    position:fixed; top:0; left:0;
+    width:8px; height:8px;
+    background:var(--accent);
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9999;
+    transform:translate(-50%,-50%);
+    transition:opacity .2s ease;
+  }
+  #ring .ring-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:.12em;
+    color:var(--bg);
+    opacity:0;
+    transition:opacity .25s ease .05s;
+    white-space:nowrap;
+  }
+
+  #ring.grow{
+    width:130px; height:130px;
+    background:var(--ink);
+    border-color:var(--ink);
+  }
+  #ring.grow .ring-label{ opacity:1; }
+  #ring.grow ~ #dot{ opacity:0; }
+
+  #ring.link{
+    width:74px; height:74px;
+    background:var(--accent);
+    border-color:var(--accent);
+  }
+  #ring.link ~ #dot{ opacity:0; }
+
+  @media (hover:none), (pointer:coarse){
+    #ring, #dot{ display:none; }
+    body{ cursor:auto; }
+  }
+
+  /* ================= nav ================= */
+  .nav{
+    position:sticky; top:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:26px 5vw;
+    background:linear-gradient(var(--bg) 60%, transparent);
+  }
+  .logo{ font-weight:500; font-size:13px; letter-spacing:.02em; }
+  .nav-links{
+    display:flex; gap:34px;
+    font-size:13px; letter-spacing:.02em; color:var(--soft);
+  }
+  .nav-links a{ cursor:none; transition:color .2s ease; }
+  .nav-links a:hover{ color:var(--ink); }
+  .nav-social{ display:flex; gap:18px; align-items:center; }
+  .nav-social a{ cursor:none; display:flex; }
+  .nav-social svg{ width:17px; height:17px; fill:var(--ink); transition:fill .2s ease; }
+  .nav-social a:hover svg{ fill:var(--accent); }
+
+  @media (max-width:760px){
+    .nav-links{ display:none; }
+  }
+
+  /* ================= hero collage ================= */
+  .hero{
+    position:relative;
+    width:min(1360px, 96vw);
+    margin:0 auto;
+    height:960px;
+    overflow:visible;
+  }
+
+  .hero-wrap{ overflow:hidden; }
+
+  .tile{
+    position:absolute;
+    z-index:2;
+    cursor:none;
+    display:flex;
+    background:var(--bg);
+    transition:transform .5s cubic-bezier(.2,.8,.2,1);
+  }
+  .tile img{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:contain;   /* never crop — always show full image */
+    filter:grayscale(8%);
+    transition:filter .5s ease, transform .5s ease;
+  }
+  .tile:hover img{ filter:grayscale(0%); }
+
+  .tile .tag{
+    position:absolute;
+    bottom:-24px; left:0;
+    font-family:'JetBrains Mono', monospace;
+    font-size:9.5px;
+    letter-spacing:.08em;
+    color:var(--soft);
+    opacity:0;
+    transition:opacity .3s ease;
+  }
+  .tile:hover .tag{ opacity:1; }
+
+  /* desktop composition coordinates */
+  .h1{ top:14px;  left:1%;   width:180px; height:126px; }
+  .h2{ top:6px;   left:17%;  width:210px; height:300px; }
+  .h3{ top:8px;   left:39%;  width:168px; height:212px; }
+  .h4{ top:96px;  left:52.5%;width:132px; height:150px; }
+  .h5{ top:38px;  right:1%;  width:270px; height:182px; }
+  .h6{ top:330px; left:35%;  width:300px; height:340px; z-index:3; }
+  .h7{ top:440px; left:3%;   width:180px; height:160px; }
+  .h8{ top:552px; left:14%;  width:150px; height:132px; }
+  .h9{ top:470px; right:15%; width:160px; height:190px; }
+  .h10{top:566px; right:1%;  width:180px; height:126px; }
+
+  /* ================= scroll cue ================= */
+  .cue{
+    position:absolute;
+    bottom:20px; left:50%;
+    transform:translateX(-50%);
+    font-family:'JetBrains Mono', monospace;
+    font-size:10px;
+    letter-spacing:.2em;
+    color:var(--soft);
+    z-index:4;
+  }
+
+  /* ================= selected works ================= */
+  .works{
+    max-width:1100px;
+    margin:140px auto 0;
+    padding:0 5vw;
+  }
+  .works-head{
+    display:flex; justify-content:space-between; align-items:baseline;
+    border-top:1px solid var(--ink);
+    padding-top:16px;
+    margin-bottom:80px;
+  }
+  .works-head h2{
+    font-size:14px; letter-spacing:.06em; font-weight:600;
+  }
+  .works-head span{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px; color:var(--soft);
+  }
+
+  .work-row{
+    display:flex;
+    align-items:flex-end;
+    gap:60px;
+    margin-bottom:180px;
+  }
+  .work-row.reverse{ flex-direction:row-reverse; text-align:right; }
+  .work-row .frame{
+    flex:0 0 auto;
+    cursor:none;
+    max-width:56%;
+  }
+  .work-row .frame img{
+    display:block;
+    width:100%;
+    height:auto;      /* full image, never cropped */
+    max-height:70vh;
+    object-fit:contain;
+    filter:grayscale(6%);
+    transition:filter .5s ease, transform .6s cubic-bezier(.2,.8,.2,1);
+  }
+  .work-row .frame:hover img{ filter:grayscale(0%); transform:scale(1.015); }
+
+  .work-info{ flex:1; }
+  .work-info .idx{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px; color:var(--soft); margin-bottom:10px; display:block;
+  }
+  .work-info h3{
+    font-size:clamp(22px,3vw,34px);
+    font-weight:700;
+    letter-spacing:-.01em;
+    line-height:1.15;
+  }
+  .work-info p{
+    margin-top:14px;
+    font-size:13px;
+    color:var(--soft);
+    max-width:280px;
+    line-height:1.6;
+  }
+  .work-row.reverse .work-info p{ margin-left:auto; }
+
+  @media (max-width:760px){
+    .work-row, .work-row.reverse{ flex-direction:column; align-items:flex-start; text-align:left; gap:22px; margin-bottom:110px; }
+    .work-row .frame{ max-width:100%; }
+    .work-row.reverse .work-info p{ margin-left:0; }
+  }
+
+  /* ================= footer ================= */
+  .footer{
+    text-align:center;
+    padding:120px 24px 100px;
+  }
+  .footer .fbrand{
+    font-size:clamp(40px,9vw,110px);
+    font-weight:900;
+    letter-spacing:-.02em;
+    line-height:1;
+  }
+  .footer .floc{
+    margin-top:18px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px; letter-spacing:.25em; color:var(--soft);
+  }
+  .footer .socials{
+    margin-top:40px;
+    display:flex; justify-content:center; gap:30px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px; letter-spacing:.1em;
+  }
+  .footer .socials a{
+    padding-bottom:4px; border-bottom:1px solid var(--ink); cursor:none;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .footer .socials a:hover{ color:var(--accent); border-color:var(--accent); }
+
+  /* ================= lightbox ================= */
+  .lightbox{
+    position:fixed; inset:0; z-index:200;
+    background:rgba(10,10,9,.97);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; visibility:hidden;
+    transition:opacity .35s ease, visibility .35s ease;
+  }
+  .lightbox.open{ opacity:1; visibility:visible; }
+  .lightbox img{
+    max-width:86vw; max-height:82vh;
+    object-fit:contain;
+    opacity:0; transform:scale(.96);
+    transition:opacity .35s ease, transform .35s ease;
+    box-shadow:0 40px 100px rgba(0,0,0,.5);
+  }
+  .lightbox.open img{ opacity:1; transform:scale(1); }
+  .lb-cap{
+    position:absolute; bottom:38px; left:50%; transform:translateX(-50%);
+    color:#f2f1ee; font-family:'JetBrains Mono', monospace;
+    font-size:11px; letter-spacing:.1em; text-align:center;
+  }
+  .lb-close, .lb-next, .lb-prev{
+    position:fixed; color:#f2f1ee; background:none; border:none;
+    font-family:'JetBrains Mono', monospace; cursor:none; z-index:210;
+  }
+  .lb-close{ top:28px; right:36px; font-size:26px; line-height:1; }
+  .lb-next, .lb-prev{ top:50%; transform:translateY(-50%); font-size:32px; padding:14px; }
+  .lb-next{ right:20px; } .lb-prev{ left:20px; }
+  .lb-count{
+    position:fixed; top:32px; left:36px; color:#f2f1ee;
+    font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:.1em; z-index:210;
+  }
+
+  /* ================= mobile: flow, no absolute collage ================= */
+  @media (max-width:900px){
+    .hero{ height:auto; padding:20px 0 60px; }
+    .tile{
+      position:static !important;
+      width:84vw !important; height:auto !important;
+      margin:0 auto 34px;
+      display:block;
+    }
+    .tile img{ height:auto; max-height:60vh; }
+    .tile .tag{ position:static; opacity:1; display:block; margin-top:8px; }
+    .cue{ display:none; }
+  }
 </style>
 </head>
-<body>
+<body id="top">
 
-<!-- dot cursor -->
+<div id="ring"><span class="ring-label">VER +</span></div>
 <div id="dot"></div>
 
-<!-- lightbox -->
-<div id="lb" role="dialog" aria-modal="true">
-  <button class="lb-close" id="lb-x">✕ close</button>
-  <div class="lb-inner">
-    <div class="lb-img-wrap"><img id="lb-img" src="" alt=""></div>
-    <div class="lb-info">
-      <div class="lb-tag"   id="lb-tag"></div>
-      <div class="lb-title" id="lb-title"></div>
-      <div class="lb-desc"  id="lb-desc"></div>
-    </div>
+<nav class="nav">
+  <div class="logo">olucz</div>
+  <div class="nav-links">
+    <a href="#top">Início</a>
+    <a href="#works">Works</a>
+    <a href="#footer">Contato</a>
   </div>
-</div>
-
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-brand">olucz<em>.</em></a>
-  <ul class="nav-links">
-    <li><a href="#work">Work</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#">Contact</a></li>
-  </ul>
+  <div class="nav-social">
+    <a href="https://www.instagram.com/o.lucz/" target="_blank" rel="noopener" aria-label="Instagram">
+      <svg viewBox="0 0 24 24"><path d="M12 2c2.7 0 3.06.01 4.12.06 1.06.05 1.79.22 2.43.47.66.26 1.22.6 1.77 1.15.55.55.89 1.11 1.15 1.77.25.64.42 1.37.47 2.43.05 1.06.06 1.42.06 4.12s-.01 3.06-.06 4.12c-.05 1.06-.22 1.79-.47 2.43a4.9 4.9 0 0 1-1.15 1.77 4.9 4.9 0 0 1-1.77 1.15c-.64.25-1.37.42-2.43.47-1.06.05-1.42.06-4.12.06s-3.06-.01-4.12-.06c-1.06-.05-1.79-.22-2.43-.47a4.9 4.9 0 0 1-1.77-1.15 4.9 4.9 0 0 1-1.15-1.77c-.25-.64-.42-1.37-.47-2.43C2.01 15.06 2 14.7 2 12s.01-3.06.06-4.12c.05-1.06.22-1.79.47-2.43.26-.66.6-1.22 1.15-1.77A4.9 4.9 0 0 1 5.45 2.53c.64-.25 1.37-.42 2.43-.47C8.94 2.01 9.3 2 12 2zm0 1.8c-2.65 0-2.98.01-4.02.06-.87.04-1.34.18-1.65.3-.42.16-.71.36-1.02.67-.31.31-.51.6-.67 1.02-.12.31-.26.78-.3 1.65C4.29 8.02 4.28 8.5 4.28 11.15v1.7c0 2.65.01 2.98.06 4.02.04.87.18 1.34.3 1.65.16.42.36.71.67 1.02.31.31.6.51 1.02.67.31.12.78.26 1.65.3 1.04.05 1.37.06 4.02.06s2.98-.01 4.02-.06c.87-.04 1.34-.18 1.65-.3.42-.16.71-.36 1.02-.67.31-.31.51-.6.67-1.02.12-.31.26-.78.3-1.65.05-1.04.06-1.37.06-4.02s-.01-2.98-.06-4.02c-.04-.87-.18-1.34-.3-1.65a2.75 2.75 0 0 0-.67-1.02 2.75 2.75 0 0 0-1.02-.67c-.31-.12-.78-.26-1.65-.3C14.98 3.81 14.65 3.8 12 3.8zm0 3.06a5.14 5.14 0 1 1 0 10.28 5.14 5.14 0 0 1 0-10.28zm0 1.8a3.34 3.34 0 1 0 0 6.68 3.34 3.34 0 0 0 0-6.68zm5.34-1.98a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/oluczelias/" target="_blank" rel="noopener" aria-label="LinkedIn">
+      <svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3V9zm7 0h3.8v1.64h.05c.53-.98 1.83-2.02 3.77-2.02 4.03 0 4.78 2.55 4.78 5.86V21h-4v-5.5c0-1.31-.02-3-1.86-3-1.86 0-2.14 1.42-2.14 2.9V21h-4V9z"/></svg>
+    </a>
+  </div>
 </nav>
 
-<!-- INFO BAR — first col intentionally empty -->
-<section class="info-bar">
-
-  <div class="info-empty"></div>
-
-  <div>
-    <div class="col-label">Lately;</div>
-    <a href="#" class="lately-link">Basket-1 dropped <span class="ext">(work→)</span></a>
-    <a href="#" class="lately-link">Mewtwo illustration released <span class="ext">(ig→)</span></a>
-    <a href="#" class="lately-link">SAINT poster live <span class="ext">(work→)</span></a>
-    <a href="#" class="lately-link">Golf study published <span class="ext">(work→)</span></a>
-    <a href="#" class="lately-link">JazzMan series started <span class="ext">(ig→)</span></a>
-    <a href="#" class="lately-link">Run-2 updated <span class="ext">(work→)</span></a>
-    <a href="#" class="lately-link">Yeux &amp; iro-(cor) out now <span class="ext">(work→)</span></a>
+<section class="hero" id="work">
+  <div class="tile h1" data-idx="0" data-cap="GODZILLA / KAIJU SERIES">
+    <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Godzila-v2.png" alt="Godzilla poster">
+    <span class="tag mono">GODZILLA / KAIJU SERIES</span>
+  </div>
+  <div class="tile h2" data-idx="1" data-cap="LUCHA LIBRE / MÉXICO">
+    <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Lucha-Libre-1.png" alt="Lucha Libre poster">
+    <span class="tag mono">LUCHA LIBRE / MÉXICO</span>
+  </div>
+  <div class="tile h3" data-idx="2" data-cap="GENGAR / POKÉMON POSTER">
+    <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Gengar%201.png" alt="Gengar poster">
+    <span class="tag mono">GENGAR / POKÉMON POSTER</span>
+  </div>
+  <div class="tile h4" data-idx="3" data-cap="HARD BIKE / MOTO CULTURE">
+    <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/HardBike.jpg" alt="Hard Bike poster">
+    <span class="tag mono">HARD BIKE / MOTO CULTURE</span>
+  </div>
+  <div class="tile h5" data-idx="4" data-cap="ORANGE / STILL LIFE">
+    <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Orange-1.png" alt="Orange poster">
+    <span class="tag mono">ORANGE / STILL LIFE</span>
+  </div>
+  <div class="tile h6" data-idx="5" data-cap="SERVING / TYPE POSTER">
+    <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Serving.jpg" alt="Serving poster">
+    <span class="tag mono">SERVING / TYPE POSTER</span>
+  </div>
+  <div class="tile h7" data-idx="6" data-cap="RUN / MOTION SERIES">
+    <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Run-1.jpg" alt="Run poster">
+    <span class="tag mono">RUN / MOTION SERIES</span>
+  </div>
+  <div class="tile h8" data-idx="7" data-cap="FLAMINGO / STUDY 22'">
+    <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Flamingo.png" alt="Flamingo poster">
+    <span class="tag mono">FLAMINGO / STUDY 22'</span>
+  </div>
+  <div class="tile h9" data-idx="8" data-cap="COMIC SANS / TYPE STUDY">
+    <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Comic-Sans-12.jpg" alt="Comic Sans poster">
+    <span class="tag mono">COMIC SANS / TYPE STUDY</span>
+  </div>
+  <div class="tile h10" data-idx="9" data-cap="DRZEWO / TREE STUDY">
+    <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Drzewo-1.png" alt="Drzewo poster">
+    <span class="tag mono">DRZEWO / TREE STUDY</span>
   </div>
 
-  <div>
-    <div class="col-label">Featured;</div>
-    <div class="featured-name">Flamingo<br>Editorial Study</div>
-  </div>
-
+  <div class="cue mono">SCROLL TO EXPLORE ↓</div>
 </section>
 
-<!-- STATEMENT -->
-<section class="statement" id="about">
-  <p>Posters that live between design, culture and obsession — each piece a visual argument for something worth saying.</p>
-  <a href="#work" class="cta">See the work →</a>
+<section class="works" id="works">
+  <div class="works-head">
+    <h2>Posters</h2>
+    <span class="mono">31 POSTERS — 2022–2024</span>
+  </div>
+
+
+  <div class="work-row">
+    <div class="frame" data-idx="10" data-cap="GODZILLA">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Godzila-v2.png" alt="Godzilla poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">01 / 31</span>
+      <h3>Godzilla</h3>
+    </div>
+  </div>
+
+  <div class="work-row reverse">
+    <div class="frame" data-idx="11" data-cap="LUCHA LIBRE">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Lucha-Libre-1.png" alt="Lucha Libre poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">02 / 31</span>
+      <h3>Lucha Libre</h3>
+    </div>
+  </div>
+
+  <div class="work-row">
+    <div class="frame" data-idx="12" data-cap="GENGAR">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Gengar%201.png" alt="Gengar poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">03 / 31</span>
+      <h3>Gengar</h3>
+    </div>
+  </div>
+
+  <div class="work-row reverse">
+    <div class="frame" data-idx="13" data-cap="HARD BIKE">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/HardBike.jpg" alt="Hard Bike poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">04 / 31</span>
+      <h3>Hard Bike</h3>
+    </div>
+  </div>
+
+  <div class="work-row">
+    <div class="frame" data-idx="14" data-cap="ORANGE">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Orange-1.png" alt="Orange poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">05 / 31</span>
+      <h3>Orange</h3>
+    </div>
+  </div>
+
+  <div class="work-row reverse">
+    <div class="frame" data-idx="15" data-cap="SERVING">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Serving.jpg" alt="Serving poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">06 / 31</span>
+      <h3>Serving</h3>
+    </div>
+  </div>
+
+  <div class="work-row">
+    <div class="frame" data-idx="16" data-cap="RUN">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Run-1.jpg" alt="Run poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">07 / 31</span>
+      <h3>Run</h3>
+    </div>
+  </div>
+
+  <div class="work-row reverse">
+    <div class="frame" data-idx="17" data-cap="FLAMINGO">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Flamingo.png" alt="Flamingo poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">08 / 31</span>
+      <h3>Flamingo</h3>
+    </div>
+  </div>
+
+  <div class="work-row">
+    <div class="frame" data-idx="18" data-cap="COMIC SANS">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Comic-Sans-12.jpg" alt="Comic Sans poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">09 / 31</span>
+      <h3>Comic Sans</h3>
+    </div>
+  </div>
+
+  <div class="work-row reverse">
+    <div class="frame" data-idx="19" data-cap="DRZEWO">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Drzewo-1.png" alt="Drzewo poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">10 / 31</span>
+      <h3>Drzewo</h3>
+    </div>
+  </div>
+
+  <div class="work-row">
+    <div class="frame" data-idx="20" data-cap="ASTERISCO">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Asterisco-v1---A4.png" alt="Asterisco poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">11 / 31</span>
+      <h3>Asterisco</h3>
+    </div>
+  </div>
+
+  <div class="work-row reverse">
+    <div class="frame" data-idx="21" data-cap="OVERCOME">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Overcome-v1---A4.png" alt="Overcome poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">12 / 31</span>
+      <h3>Overcome</h3>
+    </div>
+  </div>
+
+  <div class="work-row">
+    <div class="frame" data-idx="22" data-cap="ESKA FX">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/ESKA-FX_1778338960005.png" alt="ESKA FX poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">13 / 31</span>
+      <h3>ESKA FX</h3>
+    </div>
+  </div>
+
+  <div class="work-row reverse">
+    <div class="frame" data-idx="23" data-cap="LOREM IPSUM">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Lorem%20Ipsum.png" alt="Lorem Ipsum poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">14 / 31</span>
+      <h3>Lorem Ipsum</h3>
+    </div>
+  </div>
+
+  <div class="work-row">
+    <div class="frame" data-idx="24" data-cap="X">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/x-1.jpg" alt="X poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">15 / 31</span>
+      <h3>X</h3>
+    </div>
+  </div>
+
+  <div class="work-row reverse">
+    <div class="frame" data-idx="25" data-cap="2794">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/2794-1.jpg" alt="2794 poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">16 / 31</span>
+      <h3>2794</h3>
+    </div>
+  </div>
+
+  <div class="work-row">
+    <div class="frame" data-idx="26" data-cap="ARROBA">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/%40-1.jpg" alt="Arroba poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">17 / 31</span>
+      <h3>Arroba</h3>
+    </div>
+  </div>
+
+  <div class="work-row reverse">
+    <div class="frame" data-idx="27" data-cap="BASKET">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Basket-1.png" alt="Basket poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">18 / 31</span>
+      <h3>Basket</h3>
+    </div>
+  </div>
+
+  <div class="work-row">
+    <div class="frame" data-idx="28" data-cap="CLIMB">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Climb.png" alt="Climb poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">19 / 31</span>
+      <h3>Climb</h3>
+    </div>
+  </div>
+
+  <div class="work-row reverse">
+    <div class="frame" data-idx="29" data-cap="FIRE GAME">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Fire%20Game.png" alt="Fire Game poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">20 / 31</span>
+      <h3>Fire Game</h3>
+    </div>
+  </div>
+
+  <div class="work-row">
+    <div class="frame" data-idx="30" data-cap="GOLF">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Golf.png" alt="Golf poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">21 / 31</span>
+      <h3>Golf</h3>
+    </div>
+  </div>
+
+  <div class="work-row reverse">
+    <div class="frame" data-idx="31" data-cap="JAZZ MAN">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/JazzMan1.png" alt="Jazz Man poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">22 / 31</span>
+      <h3>Jazz Man</h3>
+    </div>
+  </div>
+
+  <div class="work-row">
+    <div class="frame" data-idx="32" data-cap="MEWTWO">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Mewtwo.png" alt="Mewtwo poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">23 / 31</span>
+      <h3>Mewtwo</h3>
+    </div>
+  </div>
+
+  <div class="work-row reverse">
+    <div class="frame" data-idx="33" data-cap="RUN 2">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Run-2.png" alt="Run 2 poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">24 / 31</span>
+      <h3>Run 2</h3>
+    </div>
+  </div>
+
+  <div class="work-row">
+    <div class="frame" data-idx="34" data-cap="SAINT">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/SAINT.png" alt="Saint poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">25 / 31</span>
+      <h3>Saint</h3>
+    </div>
+  </div>
+
+  <div class="work-row reverse">
+    <div class="frame" data-idx="35" data-cap="SWEET">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Sweet.png" alt="Sweet poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">26 / 31</span>
+      <h3>Sweet</h3>
+    </div>
+  </div>
+
+  <div class="work-row">
+    <div class="frame" data-idx="36" data-cap="SÓNG">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/S%C3%B3ng.png" alt="Sóng poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">27 / 31</span>
+      <h3>Sóng</h3>
+    </div>
+  </div>
+
+  <div class="work-row reverse">
+    <div class="frame" data-idx="37" data-cap="YEUX">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Yeux.png" alt="Yeux poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">28 / 31</span>
+      <h3>Yeux</h3>
+    </div>
+  </div>
+
+  <div class="work-row">
+    <div class="frame" data-idx="38" data-cap="IRO">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/iro-%28cor%29.png" alt="Iro poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">29 / 31</span>
+      <h3>Iro</h3>
+    </div>
+  </div>
+
+  <div class="work-row reverse">
+    <div class="frame" data-idx="39" data-cap="MEWTWO">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/mewtwo.png" alt="Mewtwo poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">30 / 31</span>
+      <h3>Mewtwo</h3>
+    </div>
+  </div>
+
+  <div class="work-row">
+    <div class="frame" data-idx="40" data-cap="SAINT">
+      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/saint.png" alt="Saint poster">
+    </div>
+    <div class="work-info">
+      <span class="idx mono">31 / 31</span>
+      <h3>Saint</h3>
+    </div>
+  </div>
 </section>
 
-<!-- MARQUEE -->
-<div class="mq-wrap">
-  <div class="mq-track">
-    <span>Poster Design</span><span class="sep">✦</span>
-    <span>Typography</span><span class="sep">✦</span>
-    <span>Illustration</span><span class="sep">✦</span>
-    <span>Editorial</span><span class="sep">✦</span>
-    <span>Art Direction</span><span class="sep">✦</span>
-    <span>Motion</span><span class="sep">✦</span>
-    <span>Visual Identity</span><span class="sep">✦</span>
-    <span>Poster Design</span><span class="sep">✦</span>
-    <span>Typography</span><span class="sep">✦</span>
-    <span>Illustration</span><span class="sep">✦</span>
-    <span>Editorial</span><span class="sep">✦</span>
-    <span>Art Direction</span><span class="sep">✦</span>
-    <span>Motion</span><span class="sep">✦</span>
-    <span>Visual Identity</span><span class="sep">✦</span>
-  </div>
-</div>
-
-<!-- ─── UNIFIED GALLERY ─── -->
-<section class="gallery" id="work">
-
-  <!-- row 1 · trio -->
-  <!-- row 1 · trio · symbols -->
-  <div class="g-row trio">
-    <div class="g-item" data-speed="38"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/2794-1.jpg"
-      data-tag="Typography" data-title="2794"
-      data-desc="Four digits stripped of meaning, charged with form. 2794 stopped being a number the moment it became a poster.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/2794-1.jpg" alt="2794" loading="lazy">
-      <div class="ov"></div><div class="lbl">2794</div>
-    </div>
-    <div class="g-item" data-speed="55"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/%40-1.jpg"
-      data-tag="Typography" data-title="@"
-      data-desc="Before email, before the internet — the @ carried centuries of meaning. Here it finally gets its own wall.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/%40-1.jpg" alt="@" loading="lazy">
-      <div class="ov"></div><div class="lbl">@</div>
-    </div>
-    <div class="g-item" data-speed="28"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/x-1.jpg"
-      data-tag="Typography" data-title="X"
-      data-desc="Cross, cancel, multiply, mark. X is the most loaded character in the alphabet — this is its close-up.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/x-1.jpg" alt="X" loading="lazy">
-      <div class="ov"></div><div class="lbl">X</div>
-    </div>
-  </div>
-
-  <!-- row 2 · solo -->
-  <div class="g-row solo">
-    <div class="g-item" data-speed="60"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Asterisco-v1---A4.png"
-      data-tag="Editorial" data-title="Asterisco v1"
-      data-desc="The tiny symbol that controls every fine print. Asterisco steps out of the margin and claims the whole page.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Asterisco-v1---A4.png" alt="Asterisco" loading="lazy">
-      <div class="ov"></div><div class="lbl">Asterisco v1</div>
-    </div>
-  </div>
-
-  <!-- row 3 · pair -->
-  <div class="g-row pair">
-    <div class="g-item" data-speed="44"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Comic-Sans-12.jpg"
-      data-tag="Experimental" data-title="Comic Sans 12"
-      data-desc="Banned from every boardroom, mocked in every forum. Comic Sans doesn't care — and neither does this poster.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Comic-Sans-12.jpg" alt="Comic Sans 12" loading="lazy">
-      <div class="ov"></div><div class="lbl">Comic Sans 12</div>
-    </div>
-    <div class="g-item" data-speed="24"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Lorem%20Ipsum.png"
-      data-tag="Editorial" data-title="Lorem Ipsum"
-      data-desc="Two thousand years old, used by every designer, understood by no one. Lorem Ipsum finally gets its close-up.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Lorem%20Ipsum.png" alt="Lorem Ipsum" loading="lazy">
-      <div class="ov"></div><div class="lbl">Lorem Ipsum</div>
-    </div>
-  </div>
-
-  <!-- row 4 · solo -->
-  <div class="g-row solo">
-    <div class="g-item" data-speed="50"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Overcome-v1---A4.png"
-      data-tag="Editorial" data-title="Overcome"
-      data-desc="Not just a word — a direction. Overcome printed large enough to actually believe it.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Overcome-v1---A4.png" alt="Overcome" loading="lazy">
-      <div class="ov"></div><div class="lbl">Overcome</div>
-    </div>
-  </div>
-
-  <!-- row 5 · trio · nature -->
-  <div class="g-row trio">
-    <div class="g-item" data-speed="34"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Flamingo.png"
-      data-tag="Illustration" data-title="Flamingo"
-      data-desc="Balanced on one leg, effortlessly pink. The flamingo has always been a poster — it just needed someone to see it.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Flamingo.png" alt="Flamingo" loading="lazy">
-      <div class="ov"></div><div class="lbl">Flamingo</div>
-    </div>
-    <div class="g-item" data-speed="58"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Orange-1.png"
-      data-tag="Illustration" data-title="Orange"
-      data-desc="Sliced open, perfectly backlit. An orange so saturated it reads less like fruit and more like colour theory.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Orange-1.png" alt="Orange" loading="lazy">
-      <div class="ov"></div><div class="lbl">Orange</div>
-    </div>
-    <div class="g-item" data-speed="40"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Drzewo-1.png"
-      data-tag="Illustration" data-title="Drzewo"
-      data-desc="Tree in Polish. Roots that grip, branches that reach — Drzewo reduces a living thing to the lines that make it real.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Drzewo-1.png" alt="Drzewo" loading="lazy">
-      <div class="ov"></div><div class="lbl">Drzewo</div>
-    </div>
-  </div>
-
-  <!-- row 6 · solo · Fire Game (replaces ESKA FX) -->
-  <div class="g-row solo">
-    <div class="g-item" style="max-width:680px;width:100%;" data-speed="52"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Fire%20Game.png"
-      data-tag="Experimental" data-title="Fire Game"
-      data-desc="Play with fire. The game is the flame — intense, unpredictable and impossible to look away from.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Fire%20Game.png" alt="Fire Game" loading="lazy">
-      <div class="ov"></div><div class="lbl">Fire Game</div>
-    </div>
-  </div>
-
-  <!-- row 7 · pair · pop culture -->
-  <div class="g-row pair">
-    <div class="g-item" data-speed="30"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Gengar%201.png"
-      data-tag="Pop Culture" data-title="Gengar"
-      data-desc="Born from shadows, built from nightmares. Gengar haunts your room at 3am and looks incredible doing it.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Gengar%201.png" alt="Gengar" loading="lazy">
-      <div class="ov"></div><div class="lbl">Gengar</div>
-    </div>
-    <div class="g-item" data-speed="48"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Godzila-v2.png"
-      data-tag="Pop Culture" data-title="Godzila v2"
-      data-desc="Bigger, louder, unavoidable. Godzila v2 doesn't ask for your attention — it takes it.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Godzila-v2.png" alt="Godzila v2" loading="lazy">
-      <div class="ov"></div><div class="lbl">Godzila v2</div>
-    </div>
-  </div>
-
-  <!-- row 8 · solo -->
-  <div class="g-row solo">
-    <div class="g-item" data-speed="42"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Lucha-Libre-1.png"
-      data-tag="Pop Culture" data-title="Lucha Libre"
-      data-desc="Behind the mask lives a legend. Lucha Libre is culture, theatre and sport wrapped in one graphic explosion.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Lucha-Libre-1.png" alt="Lucha Libre" loading="lazy">
-      <div class="ov"></div><div class="lbl">Lucha Libre</div>
-    </div>
-  </div>
-
-  <!-- row 9 · trio · sport -->
-  <div class="g-row trio">
-    <div class="g-item" data-speed="36"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/HardBike.jpg"
-      data-tag="Sport" data-title="HardBike"
-      data-desc="Mud, chain grease and burning legs. HardBike is what it feels like to keep going when your body says stop.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/HardBike.jpg" alt="HardBike" loading="lazy">
-      <div class="ov"></div><div class="lbl">HardBike</div>
-    </div>
-    <div class="g-item" data-speed="52"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Run-1.jpg"
-      data-tag="Sport" data-title="Run"
-      data-desc="Three letters that start every race. Not the result, not the distance — just the act, stripped raw.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Run-1.jpg" alt="Run" loading="lazy">
-      <div class="ov"></div><div class="lbl">Run</div>
-    </div>
-    <div class="g-item" data-speed="33"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Serving.jpg"
-      data-tag="Sport" data-title="Serving"
-      data-desc="The millisecond before impact. A serve loaded with speed, control and everything at stake.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Serving.jpg" alt="Serving" loading="lazy">
-      <div class="ov"></div><div class="lbl">Serving</div>
-    </div>
-  </div>
-
-  <!-- row 10 · trio · sport continued -->
-  <div class="g-row trio">
-    <div class="g-item" data-speed="38"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Basket-1.png"
-      data-tag="Sport" data-title="Basket"
-      data-desc="The arc of a perfect shot drawn through space. Basketball as physics, ballet and pure graphic obsession.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Basket-1.png" alt="Basket" loading="lazy">
-      <div class="ov"></div><div class="lbl">Basket</div>
-    </div>
-    <div class="g-item" data-speed="55"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Golf.png"
-      data-tag="Sport" data-title="Golf"
-      data-desc="Total stillness before the swing. Golf is a game of silence — this poster captures the moment right before the break.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Golf.png" alt="Golf" loading="lazy">
-      <div class="ov"></div><div class="lbl">Golf</div>
-    </div>
-    <div class="g-item" data-speed="30"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Run-2.png"
-      data-tag="Sport" data-title="Run 2"
-      data-desc="You thought the race was over. Run 2 pushes off the same wall heading somewhere completely new.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Run-2.png" alt="Run 2" loading="lazy">
-      <div class="ov"></div><div class="lbl">Run 2</div>
-    </div>
-  </div>
-
-  <!-- row 11 · solo · mewtwo (lowercase, new file) -->
-  <div class="g-row solo">
-    <div class="g-item" data-speed="58"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/mewtwo.png"
-      data-tag="Pop Culture" data-title="Mewtwo"
-      data-desc="Created in a lab, escaped from control. Mewtwo is the most powerful idea anyone ever had — and it knows it.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/mewtwo.png" alt="Mewtwo" loading="lazy">
-      <div class="ov"></div><div class="lbl">Mewtwo</div>
-    </div>
-  </div>
-
-  <!-- row 12 · pair · music & culture (saint lowercase, new file) -->
-  <div class="g-row pair">
-    <div class="g-item" data-speed="44"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/JazzMan1.png"
-      data-tag="Music" data-title="Jazz Man"
-      data-desc="No sheet music. No setlist. Just a musician and whatever comes next. Jazz Man is improvisation made permanent.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/JazzMan1.png" alt="Jazz Man" loading="lazy">
-      <div class="ov"></div><div class="lbl">Jazz Man</div>
-    </div>
-    <div class="g-item" data-speed="26"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/saint.png"
-      data-tag="Editorial" data-title="SAINT"
-      data-desc="Devotion without apology. SAINT fuses iconography and lettering into a relic you can frame.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/saint.png" alt="SAINT" loading="lazy">
-      <div class="ov"></div><div class="lbl">SAINT</div>
-    </div>
-  </div>
-
-  <!-- row 13 · pair · art studies -->
-  <div class="g-row pair">
-    <div class="g-item" data-speed="48"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Yeux.png"
-      data-tag="Study" data-title="Yeux"
-      data-desc="French for eyes, but really about looking. Yeux stares back at everything you thought you were watching alone.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/Yeux.png" alt="Yeux" loading="lazy">
-      <div class="ov"></div><div class="lbl">Yeux</div>
-    </div>
-    <div class="g-item" data-speed="35"
-      data-src="https://raw.githubusercontent.com/oluczdsgn/posters/main/iro-(cor).png"
-      data-tag="Study" data-title="iro (cor)"
-      data-desc="Iro is colour in Japanese. Cor is colour in Portuguese. Two languages, one poster, one absolute truth.">
-      <img src="https://raw.githubusercontent.com/oluczdsgn/posters/main/iro-(cor).png" alt="iro (cor)" loading="lazy">
-      <div class="ov"></div><div class="lbl">iro (cor)</div>
-    </div>
-  </div>
-
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="foot-logo">olucz<em>.</em></div>
-  <div class="foot-time">
-    BRT <span id="clock">—</span>
-    <span class="blink"></span>
+<footer class="footer" id="footer">
+  <div class="fbrand">olucz</div>
+  <div class="floc">GRAPHIC DESIGN — JARAGUÁ DO SUL, BRAZIL</div>
+  <div class="socials">
+    <a href="https://www.instagram.com/o.lucz/" target="_blank" rel="noopener">INSTAGRAM</a>
+    <a href="https://www.linkedin.com/in/oluczelias/" target="_blank" rel="noopener">LINKEDIN</a>
   </div>
 </footer>
 
+<div class="lightbox" id="lightbox">
+  <div class="lb-count" id="lbCount"></div>
+  <button class="lb-close" id="lbClose">×</button>
+  <button class="lb-prev" id="lbPrev">‹</button>
+  <img id="lbImg" src="" alt="">
+  <button class="lb-next" id="lbNext">›</button>
+  <div class="lb-cap mono" id="lbCap"></div>
+</div>
+
 <script>
-/* ── Dot cursor ── */
-const dot = document.getElementById('dot');
-document.addEventListener('mousemove', e => {
-  dot.style.left = e.clientX + 'px';
-  dot.style.top  = e.clientY + 'px';
-});
-const hoverEls = document.querySelectorAll('a, button, .g-item, .lately-link');
-hoverEls.forEach(el => {
-  el.addEventListener('mouseenter', () => dot.classList.add('h'));
-  el.addEventListener('mouseleave', () => dot.classList.remove('h'));
-});
+  /* ---------- custom cursor (more prominent, lag + label) ---------- */
+  const ring = document.getElementById('ring');
+  const dot = document.getElementById('dot');
+  const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
 
-/* ── Clock BRT ── */
-function tick() {
-  const d = new Date(new Date().toLocaleString('en-US',{timeZone:'America/Sao_Paulo'}));
-  document.getElementById('clock').textContent =
-    [d.getHours(),d.getMinutes(),d.getSeconds()]
-      .map(n => String(n).padStart(2,'0')).join(':');
-}
-tick(); setInterval(tick, 1000);
-
-/* ── Parallax ── */
-const items    = Array.from(document.querySelectorAll('.g-item'));
-let   ticking  = false;
-let   isMobile = window.innerWidth <= 680;
-
-function applyParallax() {
-  if (isMobile) return;
-  const scrollY = window.scrollY;
-  const vh = window.innerHeight;
-  items.forEach(item => {
-    const speed   = parseFloat(item.dataset.speed || '40') * 0.0008;
-    const rect    = item.getBoundingClientRect();
-    const center  = rect.top + rect.height * 0.5;
-    const dist    = center - vh * 0.5;
-    item.style.transform = `translateY(${dist * speed}px)`;
-  });
-  ticking = false;
-}
-
-window.addEventListener('scroll', () => {
-  if (!ticking) { requestAnimationFrame(applyParallax); ticking = true; }
-}, { passive: true });
-
-window.addEventListener('resize', () => {
-  isMobile = window.innerWidth <= 680;
-  if (isMobile) items.forEach(i => i.style.transform = '');
-});
-
-applyParallax();
-
-/* ── Scroll-reveal ── */
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.style.opacity    = '1';
-      e.target.style.transition = 'opacity .65s ease, box-shadow .35s ease';
-      io.unobserve(e.target);
+  if(!isTouch){
+    let mx=0,my=0, rx=0,ry=0;
+    window.addEventListener('mousemove', e=>{
+      mx=e.clientX; my=e.clientY;
+      dot.style.left = mx+'px'; dot.style.top = my+'px';
+    });
+    function loop(){
+      rx += (mx-rx)*0.18;
+      ry += (my-ry)*0.18;
+      ring.style.left = rx+'px'; ring.style.top = ry+'px';
+      requestAnimationFrame(loop);
     }
+    loop();
+
+    document.querySelectorAll('.tile, .frame').forEach(t=>{
+      t.addEventListener('mouseenter', ()=> ring.classList.add('grow'));
+      t.addEventListener('mouseleave', ()=> ring.classList.remove('grow'));
+    });
+    document.querySelectorAll('a, button').forEach(el=>{
+      el.addEventListener('mouseenter', ()=> ring.classList.add('link'));
+      el.addEventListener('mouseleave', ()=> ring.classList.remove('link'));
+    });
+  }
+
+  /* ---------- parallax on scroll ---------- */
+  const collageTiles = document.querySelectorAll('.hero .tile');
+  const speeds = [0.06,0.1,0.08,0.14,0.07,0.04,0.11,0.13,0.09,0.06];
+  collageTiles.forEach((t,i)=>{
+    t.dataset.speed = speeds[i%speeds.length];
+    t.dataset.shiftx = 0;
+    t.dataset.shifty = 0;
+    t.dataset.rot = 0;
   });
-}, { threshold: 0.06 });
-items.forEach(item => { item.style.opacity = '0'; io.observe(item); });
 
-/* ── Lightbox ── */
-const lb      = document.getElementById('lb');
-const lbImg   = document.getElementById('lb-img');
-const lbTag   = document.getElementById('lb-tag');
-const lbTitle = document.getElementById('lb-title');
-const lbDesc  = document.getElementById('lb-desc');
+  function applyTileTransform(t){
+    const sy = window.scrollY;
+    const s = parseFloat(t.dataset.speed);
+    const px = sy*s*0.4;
+    const sx = parseFloat(t.dataset.shiftx);
+    const syy = parseFloat(t.dataset.shifty);
+    const rot = parseFloat(t.dataset.rot);
+    t.style.transform = `translate(${sx}px, ${px+syy}px) rotate(${rot}deg)`;
+  }
 
-function openLB(item) {
-  lbImg.src             = item.dataset.src;
-  lbImg.alt             = item.dataset.title || '';
-  lbTag.textContent     = item.dataset.tag   || '';
-  lbTitle.textContent   = item.dataset.title || '';
-  lbDesc.textContent    = item.dataset.desc  || '';
-  lb.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeLB() {
-  lb.classList.remove('open');
-  document.body.style.overflow = '';
-}
+  if(!isTouch){
+    collageTiles.forEach(t=>{
+      t.addEventListener('mouseenter', ()=>{
+        t.dataset.shiftx = (Math.random()*70 - 35).toFixed(1);
+        t.dataset.shifty = (Math.random()*60 - 30).toFixed(1);
+        t.dataset.rot = (Math.random()*16 - 8).toFixed(1);
+        applyTileTransform(t);
+      });
+    });
+  }
 
-items.forEach(item => item.addEventListener('click', () => openLB(item)));
-document.getElementById('lb-x').addEventListener('click', closeLB);
-lb.addEventListener('click', e => { if (e.target === lb) closeLB(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLB(); });
+  const workFrames = document.querySelectorAll('.work-row .frame');
+
+  function onScroll(){
+    collageTiles.forEach(t=> applyTileTransform(t));
+    workFrames.forEach((f,i)=>{
+      const rect = f.getBoundingClientRect();
+      const centerDist = (rect.top + rect.height/2) - window.innerHeight/2;
+      const shift = Math.max(-90, Math.min(90, centerDist * -0.12));
+      f.style.transform = `translateY(${shift}px)`;
+    });
+  }
+  window.addEventListener('scroll', ()=> requestAnimationFrame(onScroll));
+  onScroll();
+
+  /* ---------- lightbox over all posters ---------- */
+  const allTiles = Array.from(document.querySelectorAll('[data-idx]')).sort(
+    (a,b)=> parseInt(a.dataset.idx) - parseInt(b.dataset.idx)
+  );
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbCap = document.getElementById('lbCap');
+  const lbCount = document.getElementById('lbCount');
+  let current = 0;
+
+  function openLightbox(i){
+    current = i; updateLightbox();
+    lightbox.classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  function updateLightbox(){
+    const el = allTiles[current];
+    const img = el.querySelector('img');
+    lbImg.src = img.src; lbImg.alt = img.alt;
+    lbCap.textContent = el.dataset.cap || '';
+    lbCount.textContent = (current+1).toString().padStart(2,'0')+' / '+allTiles.length.toString().padStart(2,'0');
+  }
+  function closeLightbox(){ lightbox.classList.remove('open'); document.body.style.overflow=''; }
+  function nextImg(){ current=(current+1)%allTiles.length; updateLightbox(); }
+  function prevImg(){ current=(current-1+allTiles.length)%allTiles.length; updateLightbox(); }
+
+  allTiles.forEach((el,i)=> el.addEventListener('click', ()=> openLightbox(i)));
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  document.getElementById('lbNext').addEventListener('click', nextImg);
+  document.getElementById('lbPrev').addEventListener('click', prevImg);
+  lightbox.addEventListener('click', e=>{ if(e.target===lightbox) closeLightbox(); });
+  document.addEventListener('keydown', e=>{
+    if(!lightbox.classList.contains('open')) return;
+    if(e.key==='Escape') closeLightbox();
+    if(e.key==='ArrowRight') nextImg();
+    if(e.key==='ArrowLeft') prevImg();
+  });
 </script>
+
 </body>
 </html>
